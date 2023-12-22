@@ -26,12 +26,6 @@ kysely-tools.json
 }
 ```
 
-## Running
-
-```shell
-$ npx kysely-tools
-```
-
 ## Commands and Helpers
 
 **Create migration**

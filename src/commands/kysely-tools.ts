@@ -9,9 +9,11 @@ const command: GluegunCommand = {
 
     print.info('Welcome to Kysely Tools')
 
-    await menu.showMenu(null, {
-      showHelp: false,
-    })
+    try {
+      await menu.showMenu(null, {
+        showHelp: false,
+      })
+    } catch {}
   },
 } as GluegunCommand
 
