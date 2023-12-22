@@ -2,7 +2,7 @@
   "name": "kysely-tools",
   "version": "0.0.1",
   "description": "kysely-tools CLI",
-  "private": true,
+  "private": false,
   "types": "build/types/types.d.ts",
   "bin": {
     "kysely-tools": "bin/kysely-tools"
