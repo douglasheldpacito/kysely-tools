@@ -1,7 +1,18 @@
 {
   "name": "kysely-tools",
-  "version": "0.0.2",
+  "version": "0.0.3",
+  "author": {
+    "name": "Douglas Held Pacito"
+  },
   "description": "kysely-tools CLI",
+  "homepage": "https://github.com/douglasheldpacito/kysely-tools#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/douglasheldpacito/kysely-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/douglasheldpacito/kysely-tools/issues"
+  },
   "keywords": [
     "kysely",
     "database",

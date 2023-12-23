@@ -1,3 +1,4 @@
+import * as path from 'path'
 import { build } from 'gluegun'
 
 /**
@@ -17,10 +18,13 @@ async function run(argv) {
     .brand('kysely-tools')
     .src(__dirname)
     .plugins('./node_modules', { matching: 'kysely-tools-*', hidden: true })
-    .plugin(__dirname + '/../node_modules/@lenne.tech/gluegun-menu/dist', {
-      commandFilePattern: ['*.js'],
-      extensionFilePattern: ['*.js'],
-    })
+    .plugin(
+      path.resolve(process.cwd(), 'node_modules/@lenne.tech/gluegun-menu/dist'),
+      {
+        commandFilePattern: ['*.js'],
+        extensionFilePattern: ['*.js'],
+      }
+    )
     .help() // provides default for help, h, --help, -h
     .version() // provides default for version, v, --version, -v
     .create()
