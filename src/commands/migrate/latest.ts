@@ -1,5 +1,5 @@
 import { GluegunMenuToolbox } from '@lenne.tech/gluegun-menu'
-import { db, migrator, showResults } from '../../config'
+import { getDb, getMigrator, showResults } from '../../config'
 import { GluegunCommand } from 'gluegun'
 
 module.exports = {
@@ -10,6 +10,9 @@ module.exports = {
     const spinner = toolbox.print.spin({
       text: 'Running all pending migrations...',
     })
+
+    const { db } = await getDb()
+    const migrator = await getMigrator()
 
     const results = await migrator.migrateToLatest()
     showResults(toolbox, results)

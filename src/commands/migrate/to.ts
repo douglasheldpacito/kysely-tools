@@ -1,5 +1,5 @@
 import { GluegunMenuToolbox } from '@lenne.tech/gluegun-menu'
-import { db, migrator, showResults } from '../../config'
+import { getDb, getMigrator, showResults } from '../../config'
 import { GluegunCommand } from 'gluegun'
 import { NO_MIGRATIONS } from 'kysely'
 
@@ -29,6 +29,9 @@ module.exports = {
 
       migrationName = resultPrompt.migrationName
     }
+
+    const { db } = await getDb()
+    const migrator = await getMigrator()
 
     if (migrationName === 'NO_MIGRATIONS') {
       const { options } = parameters

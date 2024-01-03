@@ -1,16 +1,52 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { Pool } from 'pg'
+// import { Pool } from 'pg'
 import {
   FileMigrationProvider,
   Kysely,
   MigrationResultSet,
   Migrator,
-  PostgresDialect,
+  // PostgresDialect,
 } from 'kysely'
 import { GluegunMenuToolbox } from '@lenne.tech/gluegun-menu'
 
 const CONFIG_FILE_NAME = 'kysely-tools.json'
+
+type LoadConfigProps = {
+  root?: string
+  configPath: string
+}
+type LoadConfig = KyselyConfig
+const loadConfig = async ({
+  root,
+  configPath,
+}: LoadConfigProps): Promise<LoadConfig> => {
+  const configFile = path.resolve(root || process.cwd(), configPath)
+
+  if (!fs.existsSync(configFile)) {
+    throw new Error(`Config not found at ${configFile}`)
+  }
+
+  const { kyselyToolsConfig } = await import(configFile)
+
+  return kyselyToolsConfig
+}
+
+type KyselyConfigProps = {
+  db: Kysely<unknown>
+  migrationFolder?: string
+}
+type KyselyConfig = {
+  db: Kysely<unknown>
+  migrationFolder: string
+}
+const defineConfig = ({
+  db,
+  migrationFolder,
+}: KyselyConfigProps): KyselyConfig => ({
+  db,
+  migrationFolder: migrationFolder || path.resolve(process.cwd(), 'migrations'),
+})
 
 type Config = {
   DATABASE_URL: string
@@ -37,22 +73,13 @@ function getConfig(): Config {
   }
 }
 
-const db = new Kysely({
-  dialect: new PostgresDialect({
-    pool: new Pool({
-      connectionString: getConfig().DATABASE_URL,
-    }),
-  }),
-})
-
-const migrator = new Migrator({
-  db,
-  provider: new FileMigrationProvider({
-    path,
-    fs: fs.promises,
-    migrationFolder: path.resolve(process.cwd(), getConfig().MIGRATION_PATH),
-  }),
-})
+// const db = new Kysely({
+//   dialect: new PostgresDialect({
+//     pool: new Pool({
+//       connectionString: getConfig().DATABASE_URL,
+//     }),
+//   }),
+// })
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function showResults(
@@ -87,4 +114,22 @@ function showResults(
   }
 }
 
-export { getConfig, migrator, db, showResults }
+const getDb = async (): Promise<LoadConfig> =>
+  loadConfig({ configPath: 'kysely-tools.config.ts' })
+
+const getMigrator = async (): Promise<Migrator> => {
+  const { db, migrationFolder } = await getDb()
+
+  const migrator = new Migrator({
+    db,
+    provider: new FileMigrationProvider({
+      path,
+      fs: fs.promises,
+      migrationFolder,
+    }),
+  })
+
+  return migrator
+}
+
+export { getConfig, getMigrator, getDb, showResults, loadConfig, defineConfig }
