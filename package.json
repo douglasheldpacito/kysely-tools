@@ -22,9 +22,18 @@
     "tools"
   ],
   "private": false,
-  "types": "build/types/types.d.ts",
   "bin": {
     "kysely-tools": "bin/kysely-tools"
+  },
+  "main": "./build/index.js",
+  "types": "./build/types/index.d.ts",
+  "typings": "./build/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/types/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "clean-build": "rimraf -rf ./build",
@@ -49,6 +58,9 @@
   "dependencies": {
     "@lenne.tech/gluegun-menu": "^0.0.6",
     "gluegun": "latest"
+  },
+  "peerDependencies": {
+    "kysely": ">=0.26.3"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
